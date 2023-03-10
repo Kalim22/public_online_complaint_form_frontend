@@ -9,7 +9,7 @@ import GridPhoto from "../../components/Homepage/GridPhoto";
 function Homepage() {
   const navigate = useNavigate();
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
   const [file, setFile] = useState();
 
@@ -53,7 +53,7 @@ function Homepage() {
     formData.append(
       "userName",
       name.charAt(0).toUpperCase().trim() +
-        name.substring(1, name.length).trim()
+      name.substring(1, name.length).trim()
     );
     formData.append("userMobileNumber", parseInt(mobileNumber));
     formData.append("voterIdNumber", voterIdNumber.toUpperCase());
@@ -65,20 +65,24 @@ function Homepage() {
     formData.append("complaintAbout", complaintAbout);
     formData.append("photo", file);
     formData.append("description", description);
-    // const body = {
-    //   userName:
-    //     name.charAt(0).toUpperCase().trim() +
-    //     name.substring(1, name.length).trim(),
-    //   userMobileNumber: parseInt(mobileNumber),
-    //   voterIdNumber: voterIdNumber.toUpperCase(),
-    //   area: area.charAt(0).trim() + area.substring(1, area.length).trim(),
-    //   mlaName: mlaName,
-    //   complaintAbout: complaintAbout,
-    //   description: description,
-    // };
+
     const res = await axios.post(url, formData);
     const data = await res.data;
     status(data.status);
+
+    setTimeout(() => {
+      setText({
+        name: "",
+        mobileNumber: "",
+        voterIdNumber: "",
+        area: "",
+        mlaName: "",
+        complaintAbout: "",
+        description: "",
+      })
+      setFile()
+    }, 2600)
+
   };
 
   const status = (status) => {

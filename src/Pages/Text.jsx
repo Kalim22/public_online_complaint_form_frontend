@@ -6,11 +6,13 @@ function Text() {
   const [name, setName] = useState("");
   const [file, setFile] = useState();
 
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
   const [profile, setProfile] = useState([]);
 
   const register = async (e) => {
     e.preventDefault();
-    const url = "http://localhost:8000/profile";
+    const url = `${BASE_URL}/profile`;
     const formdata = new FormData();
     formdata.append("name", name);
     formdata.append("photo", file);
@@ -19,7 +21,7 @@ function Text() {
   };
 
   const fetchData = async () => {
-    const urls = "http://localhost:8000/getprofile";
+    const urls = `${BASE_URL}/getprofile`;
     const res = await fetch(urls);
     const data = await res.json();
     setProfile(data.data);
@@ -56,7 +58,7 @@ function Text() {
             return (
               <div key={idx}>
                 <p>{ele.name}</p>
-                <img src={`http://localhost:8000/uploads/${ele.photo}`} />
+                <img src={`${BASE_URL}/uploads/${ele.photo}`} />
               </div>
             );
           })}

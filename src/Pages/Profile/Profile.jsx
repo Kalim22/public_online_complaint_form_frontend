@@ -6,7 +6,6 @@ function Profile() {
 
   const user = JSON.parse(userData);
 
-  const navigate = useNavigate();
 
   return (
     <>

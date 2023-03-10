@@ -11,7 +11,7 @@ function RequestDetails() {
   const params = useParams();
   const _id = params.request;
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ function RequestDetails() {
     const res = await axios.get(url);
     const data = await res.data;
     setUserDetails(data.details);
-    console.log(data);
+    // console.log(data);
   };
 
   useEffect(() => {

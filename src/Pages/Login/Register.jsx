@@ -17,12 +17,12 @@ import { getStatus } from "../../utils/Status";
 import { useNavigate } from "react-router-dom";
 
 const variants1 = {
-  show: { translateY: -10 },
-  hide: { translateY: -700 },
+  show: { translateY: -0 },
+  hide: { translateY: -640 },
 };
 
 function Register() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
   const navigate = useNavigate();
 
@@ -62,6 +62,10 @@ function Register() {
 
   const userRegister = async (e) => {
     e.preventDefault();
+
+    if(!(userName && userId && voterId && userPassword && userConfirmPassword)){
+      return
+    }
     if (gender === "") {
       alert("Please select gender!");
       return;
@@ -72,26 +76,31 @@ function Register() {
         userName.trim().charAt(0).toUpperCase() +
         userName.substring(1, userName.length).trim().toLowerCase(),
       email_phone: userId,
-      voterid: voterId.toUpperCase(),
+      voterid: voterId,
       gender: gender.charAt(0).toUpperCase(),
       password: userPassword,
       confirmpassword: userConfirmPassword,
     };
     const res = await axios.post(url, body);
     const data = res.data;
-    console.log(data);
-    getStatus(
-      data.status,
-      2000,
-      "Congrulation, Your account has been created successfully! \n Please Login..."
-    );
+    
+      getStatus(
+        data.status,
+        2000,
+        "Congrulation, Your account has been created successfully! \n Please Login"
+      );
+
     setText({
       userName: "",
       userId: "",
       voterId: "",
-      password: "",
-      confirmpassword: "",
+      userPassword: "",
+      userConfirmPassword: "",
     });
+
+    setTimeout(() => {
+      navigate('/login')
+    }, 2000)
   };
 
   const mlaRegister = async (e) => {
@@ -113,6 +122,10 @@ function Register() {
       2000,
       "Congrulation, Your account has been created successfully! \n Please Login"
     );
+
+    setTimeout(() => {
+      navigate('/login')
+    }, 2000)
   };
 
   return (
@@ -128,7 +141,7 @@ function Register() {
           pauseOnHover
         />
         <div
-          style={{ width: "40%", height: "75%" }}
+          style={{ width: "40%", height: "78%" }}
           className="overflow-hidden p-2"
         >
           <motion.div

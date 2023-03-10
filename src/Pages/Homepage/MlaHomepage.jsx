@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import RequestList from "../../components/Homepage/RequestList";
 
 function MlaHomepage() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
   const [requestList, setRequestList] = useState([]);
 
   const location = useLocation();

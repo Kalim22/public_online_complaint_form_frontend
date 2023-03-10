@@ -19,7 +19,7 @@ const variants1 = {
 };
 
 function Login() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
   const navigate = useNavigate();
 
