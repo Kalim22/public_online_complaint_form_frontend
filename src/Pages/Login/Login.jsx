@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loginStatus } from "../../features/login/LoginSlice";
 import { getStatus } from "../../utils/Status";
+import Help from "../../components/Help";
 
 const variants1 = {
   show: { translateY: 0 },
@@ -92,6 +93,7 @@ function Login() {
         style={{ width: "100%", height: "100vh", position: "relative" }}
         className="flex justify-center items-center bg-slate-100 flex-col"
       >
+        <Help />
         <ToastContainer
           position="top-right"
           autoClose="2000"

@@ -15,14 +15,22 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { getStatus } from "../../utils/Status";
 import { useNavigate } from "react-router-dom";
+import Help from "../../components/Help";
 
 const variants1 = {
-  show: { translateY: -0 },
-  hide: { translateY: -640 },
+  show: { translateY: 0 },
+  hide: { translateY: -620 },
 };
 
 function Register() {
   const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
+  let color = {
+    blue: "#2e86ab",
+    gray: "#9b9b9b",
+    white: "#fff",
+    black: "#000",
+  };
 
   const navigate = useNavigate();
 
@@ -63,8 +71,10 @@ function Register() {
   const userRegister = async (e) => {
     e.preventDefault();
 
-    if(!(userName && userId && voterId && userPassword && userConfirmPassword)){
-      return
+    if (
+      !(userName && userId && voterId && userPassword && userConfirmPassword)
+    ) {
+      return;
     }
     if (gender === "") {
       alert("Please select gender!");
@@ -83,12 +93,12 @@ function Register() {
     };
     const res = await axios.post(url, body);
     const data = res.data;
-    
-      getStatus(
-        data.status,
-        2000,
-        "Congrulation, Your account has been created successfully! \n Please Login"
-      );
+
+    getStatus(
+      data.status,
+      2000,
+      "Congrulation, Your account has been created successfully! \n Please Login"
+    );
 
     setText({
       userName: "",
@@ -99,8 +109,8 @@ function Register() {
     });
 
     setTimeout(() => {
-      navigate('/login')
-    }, 2000)
+      navigate("/login");
+    }, 2000);
   };
 
   const mlaRegister = async (e) => {
@@ -124,16 +134,18 @@ function Register() {
     );
 
     setTimeout(() => {
-      navigate('/login')
-    }, 2000)
+      navigate("/login");
+    }, 2000);
   };
 
   return (
     <>
       <section
         style={{ width: "100%", height: "130vh", position: "relative" }}
-        className="flex justify-center items-center bg-slate-100 flex-col"
+        className="flex  items-center bg-slate-100 flex-col"
       >
+        <Help />
+
         <ToastContainer
           position="top-right"
           autoClose="2000"
