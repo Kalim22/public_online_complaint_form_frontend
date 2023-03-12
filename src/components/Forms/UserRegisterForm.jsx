@@ -102,7 +102,7 @@ function UserForm({
         type="submit"
         // onclick={userRegister}
         text="Register"
-        className="my-5"
+        className="my-3"
         width="40%"
       />
     </>

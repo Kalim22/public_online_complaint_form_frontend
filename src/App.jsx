@@ -26,6 +26,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 
 // React router
 import { Route, Routes, useNavigate } from "react-router-dom";
+import Practice from "./Pages/Practice";
 
 function App() {
   const navigate = useNavigate();
@@ -47,7 +48,8 @@ function App() {
 
   return (
     <>
-      {!auth ? (
+      <Practice />
+      {/* {!auth ? (
         <BeforeLoginNavbar />
       ) : userType === "user" ? (
         <UserNavbar logOut={logOut} />
@@ -93,7 +95,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/text" element={<Text />} />
-      </Routes>
+      </Routes> */}
     </>
   );
 }
