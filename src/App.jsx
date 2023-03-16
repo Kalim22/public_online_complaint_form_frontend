@@ -48,8 +48,8 @@ function App() {
 
   return (
     <>
-      <Practice />
-      {/* {!auth ? (
+      {/* <Practice /> */}
+      {!auth ? (
         <BeforeLoginNavbar />
       ) : userType === "user" ? (
         <UserNavbar logOut={logOut} />
@@ -95,7 +95,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/text" element={<Text />} />
-      </Routes> */}
+      </Routes>
     </>
   );
 }

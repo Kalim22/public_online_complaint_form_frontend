@@ -6,45 +6,51 @@ import { useEffect } from "react";
 function Practice() {
   const [list, setList] = useState([]);
 
-  const fetchdata = async () => {
-    const res = await fetch("http://localhost:5000/listofmlas");
-    const data = await res.json();
-    console.log(data);
-    setList(data);
-  };
+ let url = 'http://localhost:8000/mla-registration'
+
+ let jsonurl = "http://localhost:5000/listofmlas"
 
   const body = {
-    sno: "71",
-    locality: "kalim ali",
-    mlaname: "New york",
-    partyname: "own party",
-    mlaid: "narelas",
-    password: "nare123",
+    name: "",
+    area: "",
+    partyName: "",
+    mlaId: "",
+    password: "",
   };
 
-  let url = "http://localhost:5000/listofmlas";
+  const fetchmlalist = async () => {
+    const res = await fetch(jsonurl)
+    const data = await res.json()
+    setList(data)
+    console.log(data)
+  }
 
-  const formdata = new FormData();
-  formdata.append("sno", "71");
-  formdata.append("locality", "new york");
-  formdata.append("mlaname", "kali ali");
-  formdata.append("partyname", "wonfd sal");
-  formdata.append("mlaid", "jdslfkjsadl");
-  formdata.append("password", "qwerwqlr");
+  const rest = () => {
+    list.map((ele, idx) => {
+      body.name = ele.mlaname
+      body.area = ele.locality
+      body.partyName = ele.partyname
+      body.mlaId = `${ele.locality.toLowerCase().split(' ').join('')+ele.mlaname.toLowerCase().split(' ').join('')}`
+      body.password = `${ele.locality.toLowerCase().split(' ').join('')}@12${idx}`
+      addMla()
+    })
+  }
 
-  const changename = async () => {
-    const res = await axios.post(url, formdata);
-    const data = await res.data;
-    console.log(data);
-  };
+  const addMla = async () => {
+    const res = await axios.post(url, body)
+    const data = await res.data
+    console.log(data)
+  }
 
   useEffect(() => {
-    fetchdata();
-  }, []);
+    fetchmlalist()
+  }, [])
+
+  
   return (
     <>
       <div>
-        <button onClick={changename}>click</button>
+        <button onClick={rest}>click</button>
         {list &&
           list.map((ele, idx) => {
             return (

@@ -49,34 +49,43 @@ function Login() {
 
   const userLogin = async (e) => {
     e.preventDefault();
-    // dispatch(loginStatus(url, {username, userpassword}))
-    const url = `${BASE_URL}/user-login`;
-    const body = {
-      email_phone: username,
-      password: userpassword,
-    };
-
-    const res = await axios.post(url, body);
-    const data = await res.data;
-    getStatus(data.status, 1800, "Login Successfully...");
-    localStorage.setItem("auth", JSON.stringify(data.user));
-    localStorage.setItem("userType", data.type);
-    setStatusLogin(data);
+    try {
+      const url = `${BASE_URL}/user-login`;
+      const body = {
+        email_phone: username,
+        password: userpassword,
+      };
+  
+      const res = await axios.post(url, body);
+      const data = await res.data;
+      getStatus(data.status, 1800, "Login Successfully...");
+      localStorage.setItem("auth", JSON.stringify(data.user));
+      localStorage.setItem("userType", data.type);
+      setStatusLogin(data);
+    } catch (error) {
+      toast.warn('Bad Credentials...')
+      return
+    }
   };
 
   const mlaLogin = async (e) => {
     e.preventDefault();
-    const url = `${BASE_URL}/mla-login`;
-    const body = {
-      governmentid: mlausername,
-      password: mlapassword,
-    };
-    const res = await axios.post(url, body);
-    const data = await res.data;
-    getStatus(data.status, 1800, "Login Successfully...");
-    localStorage.setItem("auth", JSON.stringify(data));
-    localStorage.setItem("userType", data.type);
-    setStatusLogin(data);
+    try {
+      const url = `http://localhost:8000/mla-login`;
+      const body = {
+        mlaId: mlausername,
+        password: mlapassword,
+      };
+      const res = await axios.post(url, body);
+      const data = await res.data;
+      getStatus(data.status, 1800, "Login Successfully...");
+      localStorage.setItem("auth", JSON.stringify(data));
+      localStorage.setItem("userType", data.type);
+      setStatusLogin(data);
+    } catch (error) {
+      toast.warn('Bad Credentials..\nPlease check help section for Mla username and password')
+      return
+    }
   };
 
   useEffect(() => {
