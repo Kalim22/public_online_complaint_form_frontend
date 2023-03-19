@@ -3,9 +3,13 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 import { MdHelpCenter, MdClose } from "react-icons/md";
-import { instructions, listofmlas } from "../assets/data/NotificationList";
+import { instructions } from "../assets/data/NotificationList";
+import { useEffect } from "react";
+import Input from "./Input/Input";
 
 function Help() {
+  const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
   let color = {
     blue: "#2e86ab",
     gray: "#9b9b9b",
@@ -17,6 +21,8 @@ function Help() {
   const [showInstruction, setShowInstruction] = useState(true);
   const [showExample, setShowExample] = useState(false);
 
+  const [searchText, setSearchText] = useState("");
+
   const handleShowExample = () => {
     setShowInstruction(false);
     setShowExample(true);
@@ -26,6 +32,26 @@ function Help() {
     setShowInstruction(true);
     setShowExample(false);
   };
+
+  const [list, setList] = useState([]);
+
+  const getDetails = async () => {
+    // const url = `${BASE_URL}/get-request/${place}`;
+    const url = `${BASE_URL}/allmlas`;
+    try {
+      const res = await fetch(url);
+
+      const data = await res.json();
+      setList(data.allMlas);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDetails();
+  }, []);
 
   return (
     <>
@@ -142,57 +168,68 @@ function Help() {
                 </p>
               );
             })}
+          {showExample && (
+            <div style={{ width: "100%", padding: "0 15%", margin: "5px 0" }}>
+              <Input
+                type="text"
+                placeholder="Enter your keywords..."
+                onchange={(e) => setSearchText(e.target.value)}
+                value={searchText}
+                label="Search Your Mla by area name..."
+              />
+            </div>
+          )}
           {showExample &&
-            listofmlas.map((mlaName) => {
-              return (
-                <div
-                  key={mlaName.sno}
-                  style={{
-                    background: "pink",
-                    margin: 4,
-                    position: "relative",
-                    overflow: "hidden",
-                    padding: "5px 10px",
-                    height: "140px",
-                    width: "320px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "flex-start",
-                    flexDirection: "column",
-                    borderRadius: "3px",
-                  }}
-                >
-                  <p
+            list
+              .filter((ele) =>
+                ele.area.toLowerCase().includes(searchText.toLowerCase())
+              )
+              .map((mlaName, idx) => {
+                return (
+                  <div
+                    key={idx}
                     style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "10px",
-                      width: "25px",
-                      height: "25px",
-                      borderRadius: "50%",
-                      background: color.blue,
-                      color: color.white,
+                      background: "pink",
+                      margin: 4,
+                      position: "relative",
+                      overflow: "hidden",
+                      padding: "5px 10px",
+                      height: "140px",
+                      width: "320px",
                       display: "flex",
                       justifyContent: "center",
-                      alignItems: "center",
-                      boxShadow:
-                        "2px 2px 2px 0 rgba(0,0,0,0.2), -2px -2px 2px 0 rgba(0,0,0,0.2)",
+                      alignItems: "flex-start",
+                      flexDirection: "column",
+                      borderRadius: "3px",
                     }}
                   >
-                    {mlaName.sno}
-                  </p>
-                  <p>Mla Name : {mlaName.mlaname}</p>
-                  <p>Place : {mlaName.locality}</p>
-                  <p>Party Name : {mlaName.partyname}</p>
-                  <p>
-                    Id :{" "}
-                    {mlaName.locality.toLowerCase() +
-                      mlaName.mlaname.toLowerCase().split(" ").join("")}
-                  </p>
-                  <p>Password : {`${mlaName.locality.toLowerCase()}123`}</p>
-                </div>
-              );
-            })}
+                    <p
+                      style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: "10px",
+                        width: "25px",
+                        height: "25px",
+                        borderRadius: "50%",
+                        background: color.blue,
+                        color: color.white,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        boxShadow:
+                          "2px 2px 2px 0 rgba(0,0,0,0.2), -2px -2px 2px 0 rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      {idx + 1}
+                    </p>
+                    <p>Mla Name : {mlaName.name}</p>
+                    <p>Place : {mlaName.area}</p>
+                    <p>Party Name : {mlaName.partyName}</p>
+                    <p>Id : {mlaName.mlaId}</p>
+                    <p>Password : {mlaName.password}</p>
+                  </div>
+                );
+              })}
         </div>
       </motion.div>
     </>

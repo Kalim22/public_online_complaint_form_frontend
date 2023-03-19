@@ -20,13 +20,11 @@ import UserNavbar from "./components/Navbar/UserNavbar";
 import MlaHomepage from "./Pages/Homepage/MlaHomepage";
 import Profile from "./Pages/Profile/Profile";
 import RequestDetails from "./Pages/RequestDetails/RequestDetails";
-import Text from "./Pages/Text";
 // Protected Routes
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 
 // React router
 import { Route, Routes, useNavigate } from "react-router-dom";
-import Practice from "./Pages/Practice";
 
 function App() {
   const navigate = useNavigate();
@@ -48,7 +46,6 @@ function App() {
 
   return (
     <>
-      {/* <Practice /> */}
       {!auth ? (
         <BeforeLoginNavbar />
       ) : userType === "user" ? (
@@ -94,7 +91,6 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/text" element={<Text />} />
       </Routes>
     </>
   );
