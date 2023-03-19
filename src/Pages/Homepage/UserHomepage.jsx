@@ -1,6 +1,7 @@
 import axios from "axios";
 import { setAutoFreeze } from "immer";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import RequestForm from "../../components/Forms/RequestForm";
@@ -12,6 +13,12 @@ function Homepage() {
   const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
   const [file, setFile] = useState();
+
+  const [mlasAndAreas, setMlasAndAreas] = useState([]);
+
+  const [selectedArea, setSelectedArea] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const [text, setText] = useState({
     name: "",
@@ -33,6 +40,14 @@ function Homepage() {
     description,
   } = text;
 
+  const getMlaAndArea = async () => {
+    const url = `${BASE_URL}/allmlas`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+    setMlasAndAreas(data.allMlas);
+  };
+
   const fileHandler = (e) => {
     setFile(e.target.files[0]);
   };
@@ -43,47 +58,53 @@ function Homepage() {
 
   const addRequest = async (e) => {
     e.preventDefault();
-    const url = `${BASE_URL}/add-request`;
+    try {
+      setLoading(true);
+      const url = `${BASE_URL}/add-request`;
 
-    const config = {
-      headers: { "content-type": "multipart/form-data" },
-    };
+      const config = {
+        headers: { "content-type": "multipart/form-data" },
+      };
 
-    const formData = new FormData();
-    formData.append(
-      "userName",
-      name.charAt(0).toUpperCase().trim() +
-      name.substring(1, name.length).trim()
-    );
-    formData.append("userMobileNumber", parseInt(mobileNumber));
-    formData.append("voterIdNumber", voterIdNumber.toUpperCase());
-    formData.append(
-      "area",
-      area.charAt(0).trim() + area.substring(1, area.length).trim()
-    );
-    formData.append("mlaName", mlaName);
-    formData.append("complaintAbout", complaintAbout);
-    formData.append("photo", file);
-    formData.append("description", description);
+      const formData = new FormData();
+      formData.append(
+        "userName",
+        name.charAt(0).toUpperCase().trim() +
+          name.substring(1, name.length).trim()
+      );
+      formData.append("userMobileNumber", parseInt(mobileNumber));
+      formData.append("voterIdNumber", voterIdNumber.toUpperCase());
+      formData.append("area", selectedArea);
+      // formData.append("mlaName", mlaName);
+      formData.append("complaintAbout", complaintAbout);
+      formData.append("photo", file);
+      formData.append("description", description);
 
-    const res = await axios.post(url, formData);
-    const data = await res.data;
-    status(data.status);
+      const res = await axios.post(url, formData);
+      const data = await res.data;
+      setLoading(false);
+      status(data.status);
 
-    setTimeout(() => {
-      setText({
-        name: "",
-        mobileNumber: "",
-        voterIdNumber: "",
-        area: "",
-        mlaName: "",
-        complaintAbout: "",
-        description: "",
-      })
-      setFile()
-    }, 2600)
-
+      setTimeout(() => {
+        setText({
+          name: "",
+          mobileNumber: "",
+          voterIdNumber: "",
+          area: "",
+          complaintAbout: "",
+          description: "",
+        });
+        selectedArea("");
+        setFile();
+      }, 2600);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    getMlaAndArea();
+  }, []);
 
   const status = (status) => {
     if (status === "success") {
@@ -99,6 +120,32 @@ function Homepage() {
       toast.error("Refresh the page and please try again!");
     }
   };
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#2e86ab",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "100px",
+            fontWeight: "600",
+            color: " #9b9b9b",
+          }}
+        >
+          Loading....
+        </h1>
+      </div>
+    );
+  }
+
   return (
     <>
       <ToastContainer position="top right" autoClose={2000} />
@@ -125,6 +172,8 @@ function Homepage() {
               complaintAbout={complaintAbout}
               description={description}
               fileHandler={fileHandler}
+              mlasAndAreas={mlasAndAreas}
+              setSelectedArea={setSelectedArea}
             />
           </form>
         </div>

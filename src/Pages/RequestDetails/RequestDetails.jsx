@@ -18,11 +18,15 @@ function RequestDetails() {
   const [userDetails, setUserDetails] = useState([]);
 
   const fetchUserDetails = async () => {
-    const url = `${BASE_URL}/request-details/${_id}`;
-    const res = await axios.get(url);
-    const data = await res.data;
-    setUserDetails(data.details);
-    // console.log(data);
+    try {
+      const url = `${BASE_URL}/request-details/${_id}`;
+      const res = await axios.get(url);
+      const data = await res.data;
+      setUserDetails(data.details);
+      // console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

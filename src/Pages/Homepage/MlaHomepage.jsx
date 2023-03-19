@@ -8,7 +8,7 @@ function MlaHomepage() {
   const [requestList, setRequestList] = useState([]);
 
   const location = useLocation();
-  const place = location.state.mlaDetails.mlaDetails.area;
+  const place = location.state.mlaDetails.mlaDetails.area.toLowerCase();
 
   const getRequestList = async () => {
     const url = `${BASE_URL}/get-request/${place}`;

@@ -34,6 +34,8 @@ function Login() {
 
   const auth = localStorage.getItem("auth");
 
+  const [loading, setLoading] = useState(false);
+
   const [text, setText] = useState({
     username: "",
     userpassword: "",
@@ -50,27 +52,30 @@ function Login() {
   const userLogin = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const url = `${BASE_URL}/user-login`;
       const body = {
         email_phone: username,
         password: userpassword,
       };
-  
+
       const res = await axios.post(url, body);
       const data = await res.data;
+      setLoading(false);
       getStatus(data.status, 1800, "Login Successfully...");
       localStorage.setItem("auth", JSON.stringify(data.user));
       localStorage.setItem("userType", data.type);
       setStatusLogin(data);
     } catch (error) {
-      toast.warn('Bad Credentials...')
-      return
+      toast.warn("Bad Credentials...");
+      return;
     }
   };
 
   const mlaLogin = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const url = `http://localhost:8000/mla-login`;
       const body = {
         mlaId: mlausername,
@@ -78,13 +83,16 @@ function Login() {
       };
       const res = await axios.post(url, body);
       const data = await res.data;
+      setLoading(false);
       getStatus(data.status, 1800, "Login Successfully...");
       localStorage.setItem("auth", JSON.stringify(data));
       localStorage.setItem("userType", data.type);
       setStatusLogin(data);
     } catch (error) {
-      toast.warn('Bad Credentials..\nPlease check help section for Mla username and password')
-      return
+      toast.warn(
+        "Bad Credentials..\nPlease check help section for Mla username and password"
+      );
+      return;
     }
   };
 
@@ -95,6 +103,31 @@ function Login() {
       }, 3500);
     }
   }, [auth]);
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#2e86ab",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "100px",
+            fontWeight: "600",
+            color: " #9b9b9b",
+          }}
+        >
+          Loading....
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <>

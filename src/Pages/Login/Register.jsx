@@ -36,6 +36,8 @@ function Register() {
 
   const [isShow, setIsShow] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const [text, setText] = useState({
     userName: "",
     userId: "",
@@ -70,73 +72,109 @@ function Register() {
 
   const userRegister = async (e) => {
     e.preventDefault();
+    try {
+      if (
+        !(userName && userId && voterId && userPassword && userConfirmPassword)
+      ) {
+        return;
+      }
+      if (gender === "") {
+        alert("Please select gender!");
+        return;
+      }
 
-    if (
-      !(userName && userId && voterId && userPassword && userConfirmPassword)
-    ) {
-      return;
+      setLoading(true);
+      const url = `${BASE_URL}/user-registration`;
+      const body = {
+        name:
+          userName.trim().charAt(0).toUpperCase() +
+          userName.substring(1, userName.length).trim().toLowerCase(),
+        email_phone: userId,
+        voterid: voterId,
+        gender: gender.charAt(0).toUpperCase(),
+        password: userPassword,
+        confirmpassword: userConfirmPassword,
+      };
+      const res = await axios.post(url, body);
+      const data = res.data;
+      setLoading(false);
+      getStatus(
+        data.status,
+        2000,
+        "Congrulation, Your account has been created successfully! \n Please Login"
+      );
+
+      setText({
+        userName: "",
+        userId: "",
+        voterId: "",
+        userPassword: "",
+        userConfirmPassword: "",
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      console.log(error);
     }
-    if (gender === "") {
-      alert("Please select gender!");
-      return;
-    }
-    const url = `${BASE_URL}/user-registration`;
-    const body = {
-      name:
-        userName.trim().charAt(0).toUpperCase() +
-        userName.substring(1, userName.length).trim().toLowerCase(),
-      email_phone: userId,
-      voterid: voterId,
-      gender: gender.charAt(0).toUpperCase(),
-      password: userPassword,
-      confirmpassword: userConfirmPassword,
-    };
-    const res = await axios.post(url, body);
-    const data = res.data;
-
-    getStatus(
-      data.status,
-      2000,
-      "Congrulation, Your account has been created successfully! \n Please Login"
-    );
-
-    setText({
-      userName: "",
-      userId: "",
-      voterId: "",
-      userPassword: "",
-      userConfirmPassword: "",
-    });
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
   };
 
   const mlaRegister = async (e) => {
     e.preventDefault();
-    const url = `${BASE_URL}/mla-registration`;
-    const body = {
-      name: mlaUserName,
-      governmentid: governmentId.toUpperCase(),
-      area:
-        area.charAt(0).toUpperCase() +
-        area.substring(1, area.length).toLowerCase(),
-      password: mlaPassword,
-      confirmpassword: mlaConfirmPassword,
-    };
-    const res = await axios.post(url, body);
-    const data = res.data;
-    getStatus(
-      data.status,
-      2000,
-      "Congrulation, Your account has been created successfully! \n Please Login"
-    );
+    try {
+      setLoading(true);
+      const url = `${BASE_URL}/mla-registration`;
+      const body = {
+        name: mlaUserName,
+        governmentid: governmentId.toUpperCase(),
+        area:
+          area.charAt(0).toUpperCase() +
+          area.substring(1, area.length).toLowerCase(),
+        password: mlaPassword,
+        confirmpassword: mlaConfirmPassword,
+      };
+      const res = await axios.post(url, body);
+      const data = res.data;
+      setLoading(false);
+      getStatus(
+        data.status,
+        2000,
+        "Congrulation, Your account has been created successfully! \n Please Login"
+      );
 
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#2e86ab",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "100px",
+            fontWeight: "600",
+            color: " #9b9b9b",
+          }}
+        >
+          Loading....
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <>
