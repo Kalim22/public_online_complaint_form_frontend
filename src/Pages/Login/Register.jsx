@@ -18,8 +18,8 @@ import { useNavigate } from "react-router-dom";
 import Help from "../../components/Help";
 
 const variants1 = {
-  show: { translateY: 0 },
-  hide: { translateY: -620 },
+  show: { display: "none" },
+  hide: { display: "block" },
 };
 
 function Register() {
@@ -179,8 +179,8 @@ function Register() {
   return (
     <>
       <section
-        style={{ width: "100%", height: "130vh", position: "relative" }}
-        className="flex  items-center bg-slate-100 flex-col"
+        style={{ width: "100%", position: "relative", height: "100vh" }}
+        className="flex items-center bg-slate-100 flex-col"
       >
         <Help />
 
@@ -191,14 +191,14 @@ function Register() {
           pauseOnHover
         />
         <div
-          style={{ width: "40%", height: "78%" }}
-          className="overflow-hidden p-2"
+          style={{ width: "40%", height: "90vh"}}
+          className="p-2 "
         >
           <motion.div
             style={{ width: "100%", height: "100%" }}
-            className="flex items-end px -3 text-3xl mb-2 flex-col overflow-hidden"
+            className="flex items-end px-3 text-xl mb-2 flex-col overflow-hidden "
             variants={variants1}
-            animate={isShow ? "show" : "hide"}
+            animate={!isShow ? "show" : "hide"}
           >
             <form onSubmit={userRegister} style={{ width: "100%" }}>
               <UserRegisterForm
@@ -216,13 +216,13 @@ function Register() {
           <motion.div
             style={{
               width: "100%",
-              height: "100%",
+              height: "100%"
             }}
-            className="flex justify-center items-end text-3xl mt-2 flex-col"
+            className="flex justify-center items-center text-xl mt-2 flex-col"
             variants={variants1}
             animate={isShow ? "show" : "hide"}
           >
-            <form onSubmit={mlaRegister} style={{ width: "100%" }}>
+            <form onSubmit={mlaRegister} style={{ width: "100%", height: "100%" }}>
               <MlaRegisterForm
                 handleChange={handleChange}
                 mlaUserName={mlaUserName}
