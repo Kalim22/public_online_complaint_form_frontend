@@ -76,7 +76,7 @@ function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      const url = `http://localhost:8000/mla-login`;
+      const url = `${BASE_URL}/mla-login`;
       const body = {
         mlaId: mlausername,
         password: mlapassword,
